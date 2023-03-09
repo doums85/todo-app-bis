@@ -14,15 +14,32 @@ import {
 
 export default function TaskList(props) {
   const [modalVisible, setModalVisible] = useState(false);
+  // Edit
+  const [task, setTask] = useState(null);
+  const [textEntered, setTextEntered] = useState('');
+  // End Edit
+
   const modalHandler = () => setModalVisible(!modalVisible);
+  const onChangeHandler = (textFromInput) =>
+    setTextEntered(textFromInput);
 
   function longPressHandler(item) {
     // 1) Open Modal
     modalHandler();
-
+    // Edit
+    setTask(item);
+    // End Edit
     /*   // 2) Update
     props.updateTaskHandler(item); */
   }
+  
+  // Edit
+  function updateHandler() {
+    props.updateTaskHandler(task, textEntered);
+    setTextEntered('');
+    modalHandler();
+  }
+  // End Edit
 
   return (
     <View style={styles.taskListContainer}>
@@ -65,6 +82,8 @@ export default function TaskList(props) {
           <TextInput
             placeholder="Edit task"
             style={styles.textInput}
+            value={textEntered || task?.task}
+            onChangeText={onChangeHandler}
           />
 
           <View style={styles.buttonsWrap}>
@@ -73,7 +92,7 @@ export default function TaskList(props) {
               color={
                 Platform.OS === 'android' ? '#000' : '#fff'
               }
-              onPress={() => props.updateTaskHandler(item)}
+              onPress={updateHandler}
             />
             <Button
               title="Cancel"

@@ -24,17 +24,20 @@ export default function App() {
     }
   }
 
-  function updateTaskHandler(item) {
+  function updateTaskHandler(item, taskEdited) {
     // 1) Find the index of item
     const index = tasks.indexOf(item);
 
     // 2) Update tasks
     setTasks(function (currentState) {
-      currentState[index] = { task: 'edited', id: index };
+      currentState[index] = {
+        task: taskEdited,
+        id: index,
+      };
+      return currentState;
     });
-
-    console.log(tasks);
   }
+  console.log(tasks);
 
   function removeTaskHandler(id) {
     const filterTask = tasks.filter(function (element) {
